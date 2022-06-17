@@ -17,10 +17,8 @@ server = net.addDocker('server', ip='10.0.0.251',
 
 info('*** Adding producer and consumer\n')
 consumer = net.addDocker('consumer', ip='10.0.0.253',
-                         dcmd="java -jar app.py",
                          dimage="rabbit_consumer")
 producer = net.addDocker('producer', ip='10.0.0.252',
-                         dcmd="java -jar app.py",
                          dimage="rabbit_producer")
 
 info('*** Setup network\n')
@@ -32,11 +30,16 @@ net.start()
 
 info('*** Starting to execute commands\n')
 
-info('Execute: producer.cmd("hello")\n')
-info(producer.cmd("hello") + "\n")
+# info(server.cmd("/bin/bash /usr/local/bin/docker-entrypoint.sh rabbitmq-server"))
 
-info('Execute: producer.cmd("hello once again")\n')
-info(producer.cmd("hello once again") + "\n")
+info('Execute: consumer.cmd("nohup java -jar app.py &")\n')
+info(consumer.cmd("nohup java -jar app.py &") + "\n")
+
+info('Execute: producer.cmd("java -jar app.py Hello World!")\n')
+info(producer.cmd("java -jar app.jar Hello World!") + "\n")
+
+info('Execute: producer.cmd("java -jar app.py Hello World Again!")\n')
+info(producer.cmd("java -jar app.jar Hello World Again!") + "\n")
 
 CLI(net)
 
