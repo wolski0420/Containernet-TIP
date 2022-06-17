@@ -1,0 +1,7 @@
+FROM maven:3.8.3-openjdk-17
+
+WORKDIR /rabbit
+COPY ./producer .
+
+RUN mvn clean package
+RUN cp target/producer-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
