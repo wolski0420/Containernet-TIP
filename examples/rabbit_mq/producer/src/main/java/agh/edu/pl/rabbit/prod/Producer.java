@@ -2,19 +2,25 @@ package agh.edu.pl.rabbit.prod;
 
 import com.rabbitmq.client.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 public class Producer {
     public static void main(String[] args) throws IOException, TimeoutException {
+        // validation
+        if (args.length < 1) {
+            System.out.println("Wrong number of arguments!");
+            System.exit(-1);
+        }
+
         System.out.println("CREATING PRODUCER");
 
         // connection & channel creation
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("10.0.0.251");
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
@@ -22,20 +28,15 @@ public class Producer {
         String EXCHANGE_NAME = "exchange";
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
 
-        while (true) {
-            // taking message from conssole
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Enter message: ");
-            String message = br.readLine();
+        // taking message from console
+        String message = String.join(" ", args);
 
-            // break condition
-            if (message.toLowerCase().contains("exit")) {
-                System.exit(0);
-            }
+        // send message to consumer
+        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
+        System.out.println("Sent: " + message);
 
-            // send messsage to consumer
-            channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Sent: " + message);
-        }
+        // close channel and connection
+        channel.close();
+        connection.close();
     }
 }

@@ -18,7 +18,7 @@ public class Consumer {
 
         // connection & channel creation
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("10.0.0.251");
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
