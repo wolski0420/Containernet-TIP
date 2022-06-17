@@ -17,10 +17,10 @@ server = net.addDocker('server', ip='10.0.0.251',
 
 info('*** Adding producer and consumer\n')
 consumer = net.addDocker('consumer', ip='10.0.0.253',
-                         dcmd="java -jar app.py",
+                         dcmd="java -jar app.jar",
                          dimage="rabbit_consumer")
 producer = net.addDocker('producer', ip='10.0.0.252',
-                         dcmd="java -jar app.py",
+                         dcmd="java -jar app.jar",
                          dimage="rabbit_producer")
 
 info('*** Setup network\n')
