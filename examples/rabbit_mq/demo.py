@@ -32,13 +32,13 @@ info('*** Starting to execute commands\n')
 
 # info(server.cmd("/bin/bash /usr/local/bin/docker-entrypoint.sh rabbitmq-server"))
 
-info('Execute: consumer.cmd("nohup java -jar app.py &")\n')
-info(consumer.cmd("nohup java -jar app.py &") + "\n")
+info('Execute: consumer.cmd("nohup java -jar app.jar &")\n')
+info(consumer.cmd("nohup java -jar app.jar &") + "\n")
 
-info('Execute: producer.cmd("java -jar app.py Hello World!")\n')
+info('Execute: producer.cmd("java -jar app.jar Hello World!")\n')
 info(producer.cmd("java -jar app.jar Hello World!") + "\n")
 
-info('Execute: producer.cmd("java -jar app.py Hello World Again!")\n')
+info('Execute: producer.cmd("java -jar app.jar Hello World Again!")\n')
 info(producer.cmd("java -jar app.jar Hello World Again!") + "\n")
 
 CLI(net)
