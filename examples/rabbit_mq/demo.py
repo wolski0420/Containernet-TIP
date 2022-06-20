@@ -1,8 +1,8 @@
 from mininet.net import Containernet
 from mininet.node import Controller
 from mininet.cli import CLI
-from mininet.link import TCLink
 from mininet.log import info, setLogLevel
+from time import sleep
 
 setLogLevel('info')
 
@@ -30,10 +30,12 @@ net.start()
 
 info('*** Starting to execute commands\n')
 
-# info(server.cmd("/bin/bash /usr/local/bin/docker-entrypoint.sh rabbitmq-server"))
+server.start()
+sleep(5)
 
 info('Execute: consumer.cmd("nohup java -jar app.jar &")\n')
 info(consumer.cmd("nohup java -jar app.jar &") + "\n")
+sleep(2)
 
 info('Execute: producer.cmd("java -jar app.jar Hello World!")\n')
 info(producer.cmd("java -jar app.jar Hello World!") + "\n")
