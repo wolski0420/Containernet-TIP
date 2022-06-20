@@ -1,4 +1,4 @@
-FROM maven:3.8.3-openjdk-17
+FROM golebiewskidev/liberica-openjdk-alpine-17-with-maven
 
 WORKDIR /rabbit
 COPY ./producer .
