@@ -32,9 +32,11 @@ public class Producer {
         String message = String.join(" ", args);
 
         // send message to consumer
-        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
-        System.out.println("Sent: " + message);
+        for (int i = 0; i < 500; i++) {
 
+            channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
+            System.out.println("Sent: " + message);
+        }
         // close channel and connection
         channel.close();
         connection.close();
