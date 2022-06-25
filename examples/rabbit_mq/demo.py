@@ -58,8 +58,13 @@ net.start()
 
 
 info('*** Starting server\n')
+info("*** Waiting 10 sec to start server...\n")
 server.start()
-sleep(20)
+sleep(10)
+info("*** Printing server IP:PORT to reach UI\n")
+info(server.cmd("netstat -an | grep 15672 | grep ESTABLISHED | awk -F ' ' '{print $4}'"))
+info("*** Waiting 10 sec to start consumer and producers...\n")
+sleep(10)
 
 
 info('*** Starting consumer\n')
