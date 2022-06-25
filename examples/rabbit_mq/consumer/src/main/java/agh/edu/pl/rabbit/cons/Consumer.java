@@ -14,6 +14,13 @@ import java.util.concurrent.TimeoutException;
 
 public class Consumer {
     public static void main(String[] args) throws IOException, TimeoutException {
+        // validation
+        if (args.length < 1) {
+            System.out.println("Wrong number of arguments!");
+            System.out.println("Schema input : <max_nack_no_at_consumer>");
+            System.exit(-1);
+        }
+
         System.out.println("CREATED CONSUMER");
 
         // connection & channel creation
@@ -42,6 +49,7 @@ public class Consumer {
 
         // start listening
         System.out.println("Waiting for messages...");
+        channel.basicQos(Integer.parseInt(args[0]));
         channel.basicConsume(queueName, true, consumer);
     }
 }
