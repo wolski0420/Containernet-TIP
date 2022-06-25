@@ -11,8 +11,9 @@ import java.util.stream.Collectors;
 public class Producer {
     public static void main(String[] args) throws IOException, TimeoutException {
         // validation
-        if (args.length < 1) {
+        if (args.length < 2) {
             System.out.println("Wrong number of arguments!");
+            System.out.println("Schema input : <publishes_no> <message...>");
             System.exit(-1);
         }
 
@@ -29,14 +30,14 @@ public class Producer {
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
 
         // taking message from console
-        String message = String.join(" ", args);
+        String message = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
 
-        // send message to consumer
-        for (int i = 0; i < 500; i++) {
-
+        // send message to consumer ARGS[0] times
+        for (int i = 0; i < Integer.parseInt(args[0]); i++) {
             channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Sent: " + message);
+            System.out.println("Sent: " + message + " " + i);
         }
+
         // close channel and connection
         channel.close();
         connection.close();
