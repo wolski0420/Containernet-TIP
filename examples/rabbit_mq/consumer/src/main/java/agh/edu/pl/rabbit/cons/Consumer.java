@@ -42,6 +42,11 @@ public class Consumer {
         DefaultConsumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+                try{
+                    Thread.sleep(2000);
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
                 String message = new String(body, StandardCharsets.UTF_8);
                 System.out.println("Received: " + message);
             }
