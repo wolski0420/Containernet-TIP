@@ -10,7 +10,7 @@ sudo python3 demo.py <cycles_no> <cycle_sleep_interval> <producers_no> <producer
 
 Example run:
 ```bash
-sudo python3 demo.py 20 0 20 500 1
+sudo python3 demo.py 20 10   4 50000 1
 ```
 
 ## Http API 
