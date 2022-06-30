@@ -1,0 +1,7 @@
+FROM golebiewskidev/liberica-openjdk-alpine-17-with-maven
+
+WORKDIR /rabbit
+COPY ./consumer .
+
+RUN mvn clean package
+RUN cp target/consumer-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
