@@ -1,10 +1,26 @@
+from cgi import test
 from mininet.net import Containernet
 from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.log import info, setLogLevel
 from time import sleep
 from sys import argv
+import threading
+from subprocess import call
+from utils import to_csv
 
+
+test_ended =False
+def log_data():
+    while True:
+        with open("logs.txt", "a") as f:
+            call(["sudo", "docker", "stats","--no-stream","mn.server"], stdout = f)
+            sleep(1)
+            if test_ended:
+                break
+    to_csv()
+
+t1 = threading.Thread(target = log_data)
 setLogLevel('info')
 
 if len(argv) != 6:
@@ -19,7 +35,10 @@ producers_no = int(argv[3])
 producer_publishes_no = int(argv[4])
 consumer_qos = int(argv[5])
 
+info('*** Delete old log files\n')
 
+call(["sudo", "rm", "-f","logs.txt"])
+call(["sudo", "rm", "-f","logs.csv"])
 info(f'*** Starting test {cycles_no=}, {cycle_sleep_interval=}, '
      f'{producers_no=}, {producer_publishes_no=}, {consumer_qos=}\n')
 net = Containernet(controller=Controller)
@@ -32,6 +51,8 @@ server = net.addDocker('server', ip='10.0.0.251',
                        ports=[5672, 15672],
                        port_bindings={5672: 5672, 15672: 15672})
 
+t1.start()
+sleep(20)
 
 info('*** Adding consumer\n')
 consumer = net.addDocker('consumer', ip='10.0.0.252',
@@ -60,11 +81,9 @@ net.start()
 info('*** Starting server\n')
 info("*** Waiting 10 sec to start server...\n")
 server.start()
-sleep(10)
-
+sleep(40)
 info("*** Printing server IP:PORT to reach UI\n")
 info(server.cmd("netstat -an | grep 15672 | grep ESTABLISHED | awk -F ' ' '{print $4}'"))
-
 info("*** Waiting 10 sec to start consumer and producers...\n")
 sleep(10)
 
@@ -82,6 +101,10 @@ for i in range(0, cycles_no):
 
     sleep(cycle_sleep_interval)
 
+
+sleep(30)
+test_ended =True
+t1.join()
 
 info(f'*** Starting CLI\n')
 CLI(net)
