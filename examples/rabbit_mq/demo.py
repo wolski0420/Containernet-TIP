@@ -89,7 +89,7 @@ server = net.addDocker('server', ip='10.0.0.251',
 
 info('*** Adding perf-test\n')
 perf_test = net.addDocker('perf_test', ip='10.0.0.252',
-                          dimage="pivotalrabbitmq/perf-test:latest")
+                          dimage="pivotalrabbitmq/perf-test:alpine")
 
 
 info('*** Setup network\n')
@@ -100,13 +100,13 @@ net.addLink(perf_test, s1)
 #     net.addLink(producer, s1)
 #
 # net.addLink(consumer, s1)
-# net.start()
+net.start()
 
 
 info('*** Starting server\n')
 info("*** Waiting 10 sec to start server...\n")
 server.start()
-sleep(15)
+sleep(60)
 info("*** Printing server IP:PORT to reach UI\n")
 info(server.cmd("netstat -an | grep 15672 | grep ESTABLISHED | awk -F ' ' '{print $4}'"))
 # info("*** Starting rabbit metrics observer\n")
@@ -117,7 +117,7 @@ info(server.cmd("netstat -an | grep 15672 | grep ESTABLISHED | awk -F ' ' '{prin
 
 info('*** Starting perf-test\n')
 info(perf_test.cmd("bin/runjava com.rabbitmq.perf.PerfTest -x 2 -y 1 -u \"throughput-test-1\" -a --id \"test 1\""
-                   " -z 30 -h amqp://172.17.0.2"))
+                   " -z 30 -uri amqp://10.0.0.251"))
 
 
 # info('*** Starting consumer\n')
