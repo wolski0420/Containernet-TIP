@@ -2,6 +2,7 @@ from mininet.net import Containernet
 from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.log import info, setLogLevel
+from os import system
 from time import sleep
 from sys import argv
 
@@ -61,6 +62,10 @@ info(perf_test.cmd(f"bin/runjava com.rabbitmq.perf.PerfTest "
                    f"-s {message_size} "
                    f"-z {duration} "
                    f"-u \"throughput-test-1\" -a -l -o output.csv --id \"test 1\" -uri amqp://10.0.0.251"))
+
+
+info('*** Copying output from container to host')
+system("docker cp mn.perf_test:/perf_test/output.csv .")
 
 
 info(f'*** Starting CLI\n')
