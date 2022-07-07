@@ -32,7 +32,10 @@ server = net.addDocker('server', ip='10.0.0.251',
                        dimage="rabbitmq:3.10-management-alpine",
                        ports=[5672, 15672],
                        port_bindings={5672: 5672, 15672: 15672})
-
+server1 = net.addDocker('server1', ip='10.0.0.253',
+                       dimage="rabbitmq:3.10-management-alpine",
+                       ports=[5672, 15672],
+                       port_bindings={5672: 5671, 15672: 15671})
 
 info('*** Adding perf-test\n')
 perf_test = net.addDocker('perf_test', ip='10.0.0.252',
@@ -42,6 +45,7 @@ perf_test = net.addDocker('perf_test', ip='10.0.0.252',
 info('*** Setup and start network\n')
 s1 = net.addSwitch('s1')
 net.addLink(server, s1)
+net.addLink(server1, s1)
 net.addLink(perf_test, s1)
 net.start()
 
@@ -61,7 +65,7 @@ info(perf_test.cmd(f"bin/runjava com.rabbitmq.perf.PerfTest "
                    f"-q {consumer_qos} "
                    f"-s {message_size} "
                    f"-z {duration} "
-                   f"-u \"throughput-test-1\" -a -l -o output.csv --id \"test 1\" -uri amqp://10.0.0.251"))
+                   f"-u \"throughput-test-1\" -a -l -o output.csv --id \"test 1\" -uris amqp://10.0.0.251 amqp://10.0.0.253"))
 
 
 info('*** Copying output from container to host')
