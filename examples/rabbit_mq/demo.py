@@ -53,6 +53,8 @@ net.start()
 info('*** Starting server\n')
 info("*** Waiting 10 sec to start server...\n")
 server.start()
+server1.start()
+
 sleep(15)
 info("*** Printing server IP:PORT to reach UI\n")
 info(server.cmd("netstat -an | grep 15672 | grep ESTABLISHED | awk -F ' ' '{print $4}'"))
@@ -65,7 +67,7 @@ info(perf_test.cmd(f"bin/runjava com.rabbitmq.perf.PerfTest "
                    f"-q {consumer_qos} "
                    f"-s {message_size} "
                    f"-z {duration} "
-                   f"-u \"throughput-test-1\" -a -l -o output.csv --id \"test 1\" -uris amqp://10.0.0.251 amqp://10.0.0.253"))
+                   f"-u \"throughput-test-1\" -l -c 10 -o output.csv --id \"test 1\" -uris amqp://10.0.0.251 amqp://10.0.0.253"))
 
 
 info('*** Copying output from container to host')
