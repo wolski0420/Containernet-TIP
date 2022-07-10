@@ -22,7 +22,7 @@ message_size = int(argv[4])
 duration = int(argv[5])
 
 
-info(f'*** Starting test {producers_no=}, {consumers_no=}, {consumer_qos=}, {message_size=}, {duration=}')
+info(f'*** Starting test {producers_no=}, {consumers_no=}, {consumer_qos=}, {message_size=}, {duration=}\n')
 net = Containernet(controller=Controller)
 net.addController('c0')
 
@@ -67,7 +67,7 @@ info(perf_test.cmd(f"bin/runjava com.rabbitmq.perf.PerfTest "
                    f"-q {consumer_qos} "
                    f"-s {message_size} "
                    f"-z {duration} "
-                   f"-u \"throughput-test-1\" -l -c 10 -o output.csv --id \"test 1\" -uris amqp://10.0.0.251 amqp://10.0.0.253"))
+                   f"-u \"throughput-test-1\" -f mandatory -l -c 10 -o output.csv --id \"test 1\" -uris amqp://10.0.0.251 amqp://10.0.0.253"))
 
 
 info('*** Copying output from container to host')
